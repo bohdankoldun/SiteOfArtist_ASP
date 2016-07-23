@@ -1,0 +1,47 @@
+﻿
+@{
+    Layout = null;
+}
+
+@model IEnumerable<eliezerhome2.Models.Painting>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <div>
+        <h2>Мої картини</h2>
+
+        <p>
+            @Html.ActionLink("Добавить нову картину", "AddPainting")
+        </p>
+
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+
+                @Html.DisplayFor(modelItem => item.Name)
+
+
+             
+                <img src="@("/Paintings/s_" + item.URL)"  alt="@item.Name" />
+
+            }
+        }
+
+
+    </div>
+
+</body>
+</html>
+
+
+
+
+

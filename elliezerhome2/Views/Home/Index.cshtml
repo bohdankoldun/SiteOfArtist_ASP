@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model IEnumerable<eliezerhome2.Models.Painting>
+
+<div class="jumbotron">
+    <h1>Eli-Ezer</h1>
+    <p class="lead">About artist Eli-Ezer</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+  
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <img src="@("/Paintings/s_" + item.URL)" alt="@item.Name" />
+                <h2>@item.Name</h2>
+                <p>@item.ShortComment</p>
+                <p>@item.ShortComment</p>
+                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+            </div>
+          
+
+
+
+            
+
+        }
+    }
+   
+   
+  
+   
+    
+</div>

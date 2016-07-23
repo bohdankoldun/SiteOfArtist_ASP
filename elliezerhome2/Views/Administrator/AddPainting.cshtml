@@ -1,0 +1,71 @@
+﻿@{
+    Layout = null;
+}
+
+@model eliezerhome2.Models.Painting
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddPainting</title>
+</head>
+<body>
+
+    @using (Html.BeginForm("AddPainting", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Додати на сайт нову картину</legend>
+
+        <div class="editor-label">Ім'я картини</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+
+        <div class="editor-label">Дата написання:</div>
+        <div class="editor-field">
+             
+            @Html.EditorFor(model => model.Date, "{0:dd/MM/yyyy}")
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">Короткий опис картини, для зацікавлення(менше 200 символів)</div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.ShortComment)
+            @Html.ValidationMessageFor(model => model.Comment)
+        </div>
+
+        <div class="editor-label">Повний опис картини</div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Comment)
+            @Html.ValidationMessageFor(model => model.Comment)
+        </div>
+
+        <div class="editor-label">Ціна в доларах:) (якщо така є)</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Price)
+            @Html.ValidationMessageFor(model => model.Price)
+        </div>
+
+        <div class="editor-label">Photo</div>
+        <div class="editor-field">
+            <input type="file" name="uploadImage" />
+        </div>
+
+        <p>
+            <input type="submit" value="Add" />
+        </p>
+    </fieldset>
+    }
+
+    <div>
+        @Html.ActionLink("Return to list of all paintings", "Index")
+    </div>
+
+</body>
+</html>
