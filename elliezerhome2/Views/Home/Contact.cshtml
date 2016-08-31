@@ -1,17 +1,88 @@
-﻿@{
-    ViewBag.Title = "Contact";
+﻿@model eliezerhome2.Models.Artist
+
+@{
+    ViewBag.Title = "My Contact";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2 class="left">@ViewBag.Title.</h2>
+<hr />
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <address>
+                <strong class="left">Mail:</strong>
+                <br />
+                <img src="~/SitePicture/mail.png" height="100px" />
+                @foreach (string mail in Model.Mails)
+                {
+                    <br />
+                    <abbr title="Mail"><a href=@("mailto:"+  mail)>@mail</a></abbr>
+                }
+            </address>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+        </div>
+        <div class="col-md-4">
+            <address>
+                <strong class="left">Phone:</strong>
+                <br />
+                <img src="~/SitePicture/phone.jpg" height="100px" />
+                @foreach (string phone in Model.Phones)
+                {
+                    <br />
+                    <abbr title="Phone">@phone</abbr>
+                }
+            </address>
+        </div>
+        <div class="col-md-4">
+            <address>
+                <strong class="left">VK:</strong>
+                <br />
+                <img src="~/SitePicture/vk.png" height="100px" />
+                @foreach (string vk in Model.Vks)
+                {
+                    <br />
+                    <abbr title="VK"><a href=@vk target="_blank">@vk</a></abbr>
+                }
+            </address>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <address>
+                <strong class="left">Facebook:</strong>
+                <br />
+                <img src="~/SitePicture/facebook.jpg" height="100px" />
+                @foreach (string facebook in Model.Facebooks)
+                {
+                    <br />
+                    <abbr title="Facebook"><a href=@facebook target="_blank">@facebook</a></abbr>
+                }
+            </address>
+
+        </div>
+        <div class="col-md-4">
+            <address>
+                <strong class="left">Instagram:</strong>
+                <br />
+                <img src="~/SitePicture/instagram.jpg" height="100px" />
+                @foreach (string instagram in Model.Instagrams)
+                {
+                    <br />
+                    <abbr title="Instagram"><a href=@instagram target="_blank">@instagram</a></abbr>
+                }
+            </address>
+        </div>
+
+    </div>
+    <hr />
+
+    <strong>You can contact me on the above contacts!</strong>
+    <br /><br />
+}
+
+
+
+
+

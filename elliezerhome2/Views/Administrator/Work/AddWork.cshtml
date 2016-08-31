@@ -1,0 +1,83 @@
+﻿@model eliezerhome2.Models.Work
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="link-administrator">
+    @Html.ActionLink("Back to list", "Works", "Administrator")
+</div>
+
+<div id="valid_message">
+    @ViewBag.Message
+</div>
+
+<div class="form-for-adding">
+    @using (Html.BeginForm("AddWork", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "adding_form" }))
+            {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Додати на сайт нову роботу</legend>
+
+            <div class="editor-label">Ім'я  роботи:</div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { id = "Name" } })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+
+            <div class="editor-label">Дата:</div>
+            <div class="editor-field">
+
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { type = "month", id = "Date" } })
+                @Html.ValidationMessageFor(model => model.Date)
+            </div>
+
+            <div class="editor-label">Опис роботи:</div>
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Comment, new
+               {
+                   width = "100%",
+                   id = "DescribeText",
+                   onkeyup = "resizeTextarea('DescribeText')"
+               })
+                @Html.ValidationMessageFor(model => model.Comment)
+            </div>
+
+            <div class="editor-label">Ціна в доларах(якщо така є):</div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Price)
+            </div>
+
+            <div class="editor-label">
+                Це картина:
+                @Html.EditorFor(model => model.IsPainting)
+                @Html.ValidationMessageFor(model => model.IsPainting)
+            </div>
+
+
+            <div class="editor-label">
+                Показувать на сторинці Home:
+                @Html.EditorFor(model => model.IsHome)
+                @Html.ValidationMessageFor(model => model.IsHome)
+            </div>
+
+            <div class="editor-label">Фото роботи:</div>
+            <div class="editor-field" id="input_files">
+                <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+                <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
+                <ol id="list_upload_image"></ol>
+            </div>
+
+            <div class="button-send">
+                <input type="reset" value="Очистить" />
+                <input type="submit" value="Я все заповнила!" />
+            </div>
+
+        </fieldset>
+    }
+</div>
+
+@Scripts.Render("~/Scripts/administrator.adding.work.js")
+
+

@@ -1,0 +1,18 @@
+﻿@model eliezerhome2.Models.Artist
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="link-administrator">
+    @Html.ActionLink("Back to menu", "Index")
+</div>
+
+@if (Model != null)
+{   
+    { Html.RenderPartial("EditArtistSave"); }
+}
+
+
+@Scripts.Render("~/Scripts/administrator.editing.artist.js")

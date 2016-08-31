@@ -1,0 +1,27 @@
+﻿@model IList<eliezerhome2.Models.Photo>
+
+        <p>@ViewBag.Message</p>
+        <p>Виділіть червоним фото, які потрібно видалити!</p>
+        @for (int i = 0; i < Model.Count - 1; i += 2)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="@("/Paintings/" + @Model[i].URL)" width="90%" alt="photo" />
+                </div>
+                <div class="col-md-6">
+                    <img src="@("/Paintings/" + @Model[i+1].URL)" width="90%" alt="photo" />
+                </div>
+            </div>
+
+        }
+
+        @if (Model.Count % 2 > 0)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="@("/Paintings/" + @Model[Model.Count-1].URL)" width="90%" alt="photo" />
+
+                </div>
+            </div>
+        }
+    

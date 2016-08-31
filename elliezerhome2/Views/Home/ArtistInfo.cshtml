@@ -1,0 +1,49 @@
+﻿@model eliezerhome2.Models.Artist
+
+@{
+    ViewBag.Title = "Information";
+}
+
+
+@if (Model != null)
+{
+    int count = Model.Photos.Count;
+    <div>
+        <h1>Artist Eli-Ezer</h1>
+        <hr />
+        <pre>@Model.biography</pre>
+        <hr />
+
+        @if (count == 1)
+        {
+            <div id="painting">
+                <img src="@("/MyPhotos/" + @Model.Photos[0])" width="50%" alt="Eli-Ezer" />
+            </div>
+        }
+        else
+        {
+            for (int i = 0; i < count / 2; i++)
+            {
+                <div class="row">
+                    @for (int j = 0; j < 2; j++)
+                    {
+                        <div class="col-md-6">
+                            <img src="@("/MyPhotos/" + @Model.Photos[i*2+j])" width="100%" alt="Eli-Ezer" />
+                        </div>
+                    }
+                </div>
+            }
+
+
+            <div class="row">
+                @for (int i = (count / 2) * 2; i < count; i++)
+                {
+                    <div class="col-md-6">
+                        <img src="@("/MyPhotos/" + @Model.Photos[i])" width="100%" alt="Eli-Ezer" />
+                    </div>
+                }
+            </div>
+
+        }
+    </div>
+}

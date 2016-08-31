@@ -1,0 +1,103 @@
+﻿@model eliezerhome2.Models.Work
+@Styles.Render("~/Content/bootstrap_gallery")
+
+@if (Model != null)
+{
+
+    ViewBag.Title = Model.Name;
+    int count = Model.Photos.Count;
+
+    <div class="info-painting-page">
+        <h1>@Model.Name. </h1>
+        <p>Date of writing: @Model.Date.ToString("Y", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")) </p>
+        <hr />
+        <pre>@Model.Comment</pre>
+        <hr />
+        <p>@Model.Price $</p>
+
+        <!-- The container for the list of example images -->
+        <div id="links">
+            @if (count == 1)
+            {
+                <div id="painting">
+                    <a href="@("/Paintings/" + @Model.Photos[0].URL)" title="@Model.Name" data-gallery>
+                        <img src="@("/Paintings/" + @Model.Photos[0].URL)" width="40%" alt="@Model.Name" />
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                for (int i = 0; i < count / 2; i++)
+                {
+                    <div class="row">
+                        @for (int j = 0; j < 2; j++)
+                        {
+                            <div class="col-md-6">
+                                <a href="@("/Paintings/" + @Model.Photos[i*2+j].URL)" title="@Model.Name" data-gallery>
+                                    <img src="@("/Paintings/" + @Model.Photos[i*2+j].URL)" width="80%" alt="@Model.Name" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+
+
+                <div class="row">
+                    @for (int i = (count / 2) * 2; i < count; i++)
+                    {
+                        <div class="col-md-6">
+                            <a href="@("/Paintings/" + @Model.Photos[i].URL)" title="@Model.Name" data-gallery>
+                                <img src="@("/Paintings/" + @Model.Photos[i].URL)" width="80%" alt="@Model.Name" />
+                            </a>
+                        </div>
+                    }
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+    <br>
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false" style="display: none;">
+        <!-- The container for the modal slides -->
+        <div class="slides" style="width: 136600px;"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title">Happy Hour</h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        @Scripts.Render("~/bundles/bootstrap_gallery")
+
+}
+
+

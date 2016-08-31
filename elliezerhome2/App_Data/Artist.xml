@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<artist>
+  <biography>lkxcvhn zcx'ocljvbnzcx</biography>
+  <photos>
+    <photo>IMG_20150904_134218006.jpg</photo>
+    <photo>739IMG_20150907_171341800_HDR.jpg</photo>
+  </photos>
+  <mails>
+    <mail>bodos@gmail.com</mail>
+    <mail>georg@mail.ru</mail>
+  </mails>
+  <phones>
+    <phone>+1-234-567-89-00</phone>
+    <phone>+1-234-567-89-00</phone>
+    <phone>+1 234 567-89-00</phone>
+  </phones>
+  <vks>
+    <vk>https://vk.com/vladikko94</vk>
+  </vks>
+  <instagrams>
+    <instagram>https://www.instagram.com/kj/</instagram>
+    <instagram>https://www.instagram.com/kj/</instagram>
+  </instagrams>
+  <facebooks>
+    <facebook>https://www.facebook.com/O.Liashko</facebook>
+  </facebooks>
+</artist>

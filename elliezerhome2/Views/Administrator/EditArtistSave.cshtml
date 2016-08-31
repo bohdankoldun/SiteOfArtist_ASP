@@ -1,0 +1,128 @@
+﻿@model eliezerhome2.Models.Artist
+
+@if (ViewBag.Message != null)
+{
+    <p id="green-text">@(ViewBag.Message)</p>
+}
+@using (Html.BeginForm("EditArtistSave", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-editing-artist" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="form-horizontal">
+        <h4>Artist Eli-Ezer</h4>
+        <hr />
+        <div class="editor-label">Інформація про мене:</div>
+        <div class="editor-field">
+            @Html.ValidationMessageFor(model => model.biography)
+            @Html.TextAreaFor(model => model.biography, new
+       {
+           width = "100%",
+           id = "DescribeText",
+           @class = "form-control",
+           onkeyup = "resizeTextarea('DescribeText')"
+       })
+            <span class="field-validation-error" data-valmsg-for="biography_val" data-valmsg-replace="true"></span>
+        </div>
+
+        <div class="editor-label">Додати нові фото:</div>
+        <div class="editor-field" id="input_files">
+            <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+        </div>
+
+        <div class="editor-label">Виберіть фото, які хочете видалить:</div>
+        <div class="editor-field">
+            <div id="images-line">
+                @for (int i = 0; i < Model.Photos.Count; i++)
+                {
+                    <img src=@("/MyPhotos/" + Model.Photos[i]) />
+                }
+            </div>
+            <br />
+            <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true">@ViewBag.MessageDelPhoto</span>
+        </div>
+
+
+        <hr />
+        <div class="editor-label">Моя пошта:</div>
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Mails.Count; i++)
+                {
+                    if (Model.Mails[i] != "")
+                    {
+                    <input class="form-control text-box single-line" name="mails" type="text" value="@Model.Mails[i]" />
+                }
+            }
+            <div class="btn-add-contact-item" id="mails">
+                Додати ще!
+            </div>
+        </div>
+
+        <hr />
+        <div class="editor-label">Мій телефон:</div>
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Phones.Count; i++)
+                {
+                    if (Model.Phones[i] != "")
+                    {
+                    <input class="form-control text-box single-line" name="phones" type="text" value="@Model.Phones[i]" />
+                }
+            }
+            <div class="btn-add-contact-item" id="phones">
+                Додати ще!
+            </div>
+        </div>
+
+        <hr />
+        <div class="editor-label">Мій VK:</div>
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Vks.Count; i++)
+                {
+                    if (Model.Vks[i] != "")
+                    {
+                    <input class="form-control text-box single-line" name="vks" type="text" value="@Model.Vks[i]" />
+                }
+            }
+            <div class="btn-add-contact-item" id="vks">
+                Додати ще!
+            </div>
+        </div>
+
+        <hr />
+        <div class="editor-label">Мій Facebook:</div>
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Facebooks.Count; i++)
+                {
+                    if (Model.Facebooks[i] != "")
+                    {
+                    <input class="form-control text-box single-line" name="facebooks" type="text" value="@Model.Facebooks[i]" />
+                }
+            }
+            <div class="btn-add-contact-item" id="facebooks">
+                Додати ще!
+            </div>
+        </div>
+
+        <hr />
+        <div class="editor-label">Мій інстаграм:</div>
+        <div class="editor-field">
+            @for (int i = 0; i < Model.Instagrams.Count; i++)
+                {
+                    if (Model.Instagrams[i] != "")
+                    {
+                    <input class="form-control text-box single-line" name="instagrams" type="text" value="@Model.Instagrams[i]" />
+                }
+            }
+            <div class="btn-add-contact-item" id="instagrams">
+                Додати ще!
+            </div>
+        </div>
+
+        <hr />
+        <div class="button-send">
+            <input type="submit" value="Зберегти зміни!" />
+            <img src="@("/SitePicture/Green_Checkmark_clip_art_small.png")" id="loader-success" />
+        </div>
+
+    </div>
+}

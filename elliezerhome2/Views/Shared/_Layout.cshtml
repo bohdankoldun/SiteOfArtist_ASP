@@ -3,13 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Artist Eli-Ezer</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-  
-  
+
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -17,38 +18,45 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Eli-Ezer", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li onclick='RPClass(this);'>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li onclick='RPClass(this);'>@Html.ActionLink("My Works", "MyWorks", "Home", new { selectworks = "all" }, null)</li>
+                    <li onclick='RPClass(this);'>@Html.ActionLink("Events", "Events", "Home")</li>
+                    <li onclick='RPClass(this);'>@Html.ActionLink("Reviews", "Reviews", "Home")</li>
+                    <li onclick='RPClass(this);'>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <script type="text/javascript">
-(function() {
-      if (window.pluso) {return};
-       var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-       s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
-       s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://x.pluso.ru/pluso-x.js';
-       var h=d[g]('body')[0];
-       h.appendChild(s);
-    })();
+
+        <script>
+            (function () {
+                if (window.pluso) { return };
+                var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                s.type = 'text/javascript'; s.charset = 'UTF-8'; s.async = true;
+                s.src = ('https:' == window.location.protocol ? 'https' : 'http') + '://x.pluso.ru/pluso-x.js';
+                var h = d[g]('body')[0];
+                h.appendChild(s);
+            })();
         </script>
-        <div class="pluso-engine" pluso-sharer={"buttons":"facebook,vkontakte,odnoklassniki,twitter,google,print,more","style":{"size":"medium","shape":"round","theme":"theme04","css":""},"orientation":"horizontal","multiline":false}></div> 
-        <hr />
+        <div class="pluso-engine" pluso-sharer={"buttons":"facebook,vkontakte,odnoklassniki,twitter,google,print","style":{"size":"medium","shape":"round","theme":"theme04","css":""},"orientation":"horizontal","multiline":false}></div>
+       
+         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Eli-Ezer</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+   
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

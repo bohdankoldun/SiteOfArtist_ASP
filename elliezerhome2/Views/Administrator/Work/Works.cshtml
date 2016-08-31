@@ -1,0 +1,81 @@
+﻿
+@model IList<eliezerhome2.Models.Work>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="link-administrator">
+    @Html.ActionLink("Back to menu", "Index")
+</div>
+<h2>Всі мої роботи, які завантажені на сайт</h2>
+<hr />
+<div class="link-administrator">
+    @Html.ActionLink("Добавить нову роботу", "AddWork")
+</div>
+<hr />
+@if (Model != null)
+{
+
+    int count = Model.Count;
+
+    for (int i = 0; i < count / 3; i++)
+    {
+        <div class="row">
+
+            @for (int j = 0; j < 3; j++)
+            {
+                string text = Model[i * 3 + j].Comment;
+
+                <div class="col-md-4">
+
+                    <p>
+                       "@Html.DisplayFor(modelItem => @Model[i * 3 + j].Name)" 
+                    </p>
+
+                    <p>
+                        <img src="@("/Paintings/" + @Model[i*3+j].Photos[0].URL)" width="40%" alt="@Model[i*3+j].Name" />
+                    </p>
+
+                    <p>
+                        @Html.ActionLink("Edit", "EditWork", "Administrator", new { id = @Model[i * 3 + j].WorkId }, new { @class = "edit" })
+                        @Html.ActionLink("Delete", "DeleteWorkShow", "Administrator", new { id = @Model[i * 3 + j].WorkId }, new { @class = "delete" })
+                    </p>
+                </div>
+            }
+        </div>
+        <hr />
+    }
+
+
+    <div class="row">
+        @for (int i = (count / 3) * 3; i < count; i++)
+        {
+            <div class="col-md-4">
+
+                <p>
+                    "@Html.DisplayFor(modelItem => @Model[i].Name)"
+                </p>
+
+                <p>
+                    <img src="@("/Paintings/" + @Model[i].Photos[0].URL)" width="40%" alt="@Model[i].Name" />
+                </p>
+
+                <p>
+                    @Html.ActionLink("Edit", "EditWork", "Administrator", new { id = @Model[i].WorkId }, new { @class = "edit" })
+                    @Html.ActionLink("Delete", "DeleteWorkShow", "Administrator", new { id = @Model[i].WorkId }, new { @class = "delete" })
+                </p>
+            </div>
+        }
+    </div>
+
+
+
+}
+
+
+
+
+
+

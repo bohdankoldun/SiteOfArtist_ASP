@@ -61,6 +61,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -118,6 +130,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -133,9 +149,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\IAuthProvider.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministratorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -145,20 +164,56 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Artist.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\DB.sdf" />
-    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\blueimp-gallery.min.css" />
+    <Content Include="Content\bootstrap-image-gallery.min.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\my_bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Paintings\Bob_IMG_20150904_021945352.jpg" />
-    <Content Include="Paintings\s_Bob_IMG_20150904_021945352.jpg" />
+    <Content Include="MyPhotos\IMG_20150907_174406351 — копия.jpg" />
+    <Content Include="MyPhotos\IMG_20160314_141803971.jpg" />
+    <Content Include="MyPhotos\IMG_20160629_132121384.jpg" />
+    <Content Include="Scripts\administrator.editing.artist.js" />
+    <Content Include="Scripts\bootstrap-image-gallery.js" />
+    <Content Include="Scripts\bootstrap-image-gallery.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Views\Administrator\AddPainting.cshtml" />
+    <Content Include="Scripts\administrator.adding.work.js" />
+    <Content Include="Scripts\administrator.editing.work.js" />
+    <Content Include="Scripts\jquery.blueimp-gallery.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="SitePicture\facebook.jpg" />
+    <Content Include="SitePicture\Green_Checkmark_clip_art_small.png" />
+    <Content Include="SitePicture\instagram.jpg" />
+    <Content Include="SitePicture\mail.png" />
+    <Content Include="SitePicture\phone.jpg" />
+    <Content Include="SitePicture\vk.png" />
+    <Content Include="Views\Administrator\AddWork.cshtml" />
     <Content Include="Views\Administrator\Index.cshtml" />
     <None Include="Properties\PublishProfiles\eliezer.pubxml" />
     <None Include="Properties\PublishProfiles\eliezer111.pubxml" />
+    <Content Include="Views\Home\InformationPage.cshtml" />
+    <Content Include="Views\Administrator\DeleteWorkShow.cshtml" />
+    <Content Include="Views\Administrator\Works.cshtml" />
+    <Content Include="Views\Administrator\DeleteWorkDo.cshtml" />
+    <Content Include="Views\Administrator\EditWork.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Administrator\EditArtist.cshtml" />
+    <Content Include="Views\Home\ArtistInfo.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Administrator\DeletePhoto.cshtml" />
+    <Content Include="Views\Administrator\EditArtistSave.cshtml" />
+    <Content Include="Views\Home\OneGallery.cshtml" />
+    <Content Include="Views\Administrator\Gallery\Gallery.cshtml" />
+    <Content Include="Views\Administrator\Gallery\AddGallery.cshtml" />
+    <Content Include="Views\Administrator\Gallery\DeleteGalleryShow.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -200,13 +255,15 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\MyWorks.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
     <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Paintings\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
