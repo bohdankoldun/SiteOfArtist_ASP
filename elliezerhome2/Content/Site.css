@@ -339,13 +339,39 @@ input.input-validation-error {
     }
 
 #green-text {
-    color: #28790c; 
+    color: #28790c;
     font-weight: bold;
-    text-align:center;
-    background-color:#f7ff34;
-    border-radius:5px;
-    padding:5px;
+    text-align: center;
+    background-color: #f7ff34;
+    border-radius: 5px;
+    padding: 5px;
 }
 /*-------------------------------------------------------------------*/
 
+
+.gallery-photo {
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+    height: 400px;
+    overflow: hidden;
+    line-height:400px;
+}
+
+    .gallery-photo:hover {
+        border: 1px solid #c10ec3;
+    }
+
+    .gallery-photo img{
+       max-width:100%;
+       height:auto;
+    }
+
+.gallery-name {
+    margin-top: 10px;
+    font-weight: 900;
+    border-top: 1px solid #c10ec3;
+    border-bottom: 1px solid #c10ec3;
+    background-color: #f3b5f0;
+    background-image: linear-gradient(to bottom, #f79cf8, #f3b5f0);
+}
 

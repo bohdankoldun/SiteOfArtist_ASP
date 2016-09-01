@@ -1,8 +1,7 @@
-﻿@{
+﻿@model IList<eliezerhome2.Models.Work>
+@{
     ViewBag.Title = "Home";
 }
-
-@model IList<eliezerhome2.Models.Work>
 
 @if (ViewBag.Artist != null)
 {
@@ -54,7 +53,7 @@
                         <pre>@text</pre>
                     }
 
-                    <div class="btn-more"><a class="btn btn-default" href="/Home/InformationPage?id=@Model[i*3+j].WorkId">More &raquo;</a></div>
+                    <div class="btn-more"><a class="btn btn-default" href="/Home/WorkInfo?id=@Model[i*3+j].WorkId">More &raquo;</a></div>
                 </div>
 
             }
@@ -70,7 +69,7 @@
             <div class="col-md-4">
 
 
-                <img src="@("/Paintings/" + @Model[i].Photos[0].URL)" width="100%" alt="@Model[i].Name" onclick='openImageWindow(this.src);' />
+                <img src="@("/Paintings/" + @Model[i].Photos[0].URL)" width="100%" alt="@Model[i].Name" />
 
 
 
@@ -84,7 +83,7 @@
                     <pre>@text</pre>
                 }
 
-                <div class="btn-more"><a class="btn btn-default" href="/Home/InformationPage?id=@Model[i].WorkId">More &raquo;</a></div>
+                <div class="btn-more"><a class="btn btn-default" href="/Home/WorkInfo?id=@Model[i].WorkId">More &raquo;</a></div>
             </div>
         }
     </div>

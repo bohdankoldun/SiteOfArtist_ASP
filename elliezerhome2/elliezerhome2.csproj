@@ -195,25 +195,27 @@
     <Content Include="SitePicture\mail.png" />
     <Content Include="SitePicture\phone.jpg" />
     <Content Include="SitePicture\vk.png" />
-    <Content Include="Views\Administrator\AddWork.cshtml" />
+    <Content Include="Views\Administrator\Work\AddWork.cshtml" />
     <Content Include="Views\Administrator\Index.cshtml" />
     <None Include="Properties\PublishProfiles\eliezer.pubxml" />
     <None Include="Properties\PublishProfiles\eliezer111.pubxml" />
-    <Content Include="Views\Home\InformationPage.cshtml" />
-    <Content Include="Views\Administrator\DeleteWorkShow.cshtml" />
-    <Content Include="Views\Administrator\Works.cshtml" />
-    <Content Include="Views\Administrator\DeleteWorkDo.cshtml" />
-    <Content Include="Views\Administrator\EditWork.cshtml" />
+    <Content Include="Views\Home\WorkInfo.cshtml" />
+    <Content Include="Views\Administrator\Work\DeleteWorkShow.cshtml" />
+    <Content Include="Views\Administrator\Work\Works.cshtml" />
+    <Content Include="Views\Administrator\Work\DeleteWorkDo.cshtml" />
+    <Content Include="Views\Administrator\Work\EditWork.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Administrator\EditArtist.cshtml" />
     <Content Include="Views\Home\ArtistInfo.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Administrator\DeletePhoto.cshtml" />
+    <Content Include="Views\Administrator\Work\DeleteWorkPhotos.cshtml" />
     <Content Include="Views\Administrator\EditArtistSave.cshtml" />
     <Content Include="Views\Home\OneGallery.cshtml" />
-    <Content Include="Views\Administrator\Gallery\Gallery.cshtml" />
     <Content Include="Views\Administrator\Gallery\AddGallery.cshtml" />
-    <Content Include="Views\Administrator\Gallery\DeleteGalleryShow.cshtml" />
+    <Content Include="Views\Administrator\Gallery\DeleteGallery.cshtml" />
+    <Content Include="Views\Administrator\Gallery\EditGallery.cshtml" />
+    <Content Include="Views\Administrator\Gallery\Galleries.cshtml" />
+    <Content Include="Views\Home\Galleries.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -262,6 +264,7 @@
     <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GalleryPhotos\" />
     <Folder Include="Paintings\" />
   </ItemGroup>
   <ItemGroup>

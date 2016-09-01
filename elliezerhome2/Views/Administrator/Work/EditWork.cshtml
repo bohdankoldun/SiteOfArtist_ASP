@@ -14,7 +14,7 @@
 
 <div class="form-for-editing">
 
-    @using (Html.BeginForm("EditWork", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing_form" }))
+    @using (Html.BeginForm("~DeleteWorkPhotos","Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing_form" }))
             {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -65,13 +65,11 @@
                 @Html.ValidationMessageFor(model => model.IsHome)
             </div>
 
-
-
             <div class="editor-label">Додати нові фото роботи:</div>
             <div class="editor-field" id="input_files">
                 <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
                 <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
-                <ol id="list_upload_image"></ol>
+                <div id="images-line"></div>
             </div>
 
             <div class="button-send">
@@ -91,10 +89,10 @@
             {
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[i].URL)" width="100%" alt="photo" />
+                        <img src="@("/Paintings/" + @Model.Photos[i].URL)" width="90%" alt="photo" />
                     </div>
                     <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[i + 1].URL)" width="100%" alt="photo" />
+                        <img src="@("/Paintings/" + @Model.Photos[i + 1].URL)" width="90%" alt="photo" />
                     </div>
                 </div>
 
@@ -104,14 +102,14 @@
             {
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[Model.Photos.Count - 1].URL)" width="100%" alt="photo" />
+                        <img src="@("/Paintings/" + @Model.Photos[Model.Photos.Count - 1].URL)" width="90%" alt="photo" />
 
                     </div>
                 </div>
             }
         </div>
 
-        @using (Ajax.BeginForm("DeletePhoto", new AjaxOptions { UpdateTargetId = "results" }))
+        @using (Ajax.BeginForm("DeleteWorkPhotos", new AjaxOptions { UpdateTargetId = "results" }))
         {
             @Html.Hidden("id", @Model.WorkId)
             <div class="button-send">

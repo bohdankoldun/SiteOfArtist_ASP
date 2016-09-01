@@ -1,0 +1,54 @@
+﻿@model IList<eliezerhome2.Models.Gallery>
+@{
+    ViewBag.Title = "Galleries";
+}
+
+<h2>Galleries</h2>
+<hr />
+
+@if (Model != null)
+{
+
+    int count = Model.Count;
+
+    for (int i = 0; i < count / 3; i++)
+    {
+        <div class="row">
+
+            @for (int j = 0; j < 3; j++)
+            {
+
+
+                <div class="col-md-4">
+                    <a href="/Home/OneGallery?id=@Model[i*3+j].GalleryId">
+                        <div class="gallery-photo">
+                            <img src="@("/GalleryPhotos/" + @Model[i*3+j].Photos[0].URL)" width="100%" alt="@Model[i*3+j].Name" />
+                        </div>
+                    </a>
+                    <p class="callery-name">@Model[i * 3 + j].Name</p>
+
+                </div>
+
+            }
+        </div>
+        <hr />
+    }
+
+
+    <div class="row">
+        @for (int i = (count / 3) * 3; i < count; i++)
+        {
+
+            <div class="col-md-4">
+                <a href="/Home/OneGallery?id=@Model[i].GalleryId">
+                    <div class="gallery-photo">
+                        <img src="@("/GalleryPhotos/" + @Model[i].Photos[0].URL)" width="100%" alt="@Model[i].Name" />
+                    </div>
+                </a>
+                <p class="gallery-name">@Model[i].Name</p>
+
+            </div>
+        }
+    </div>
+}
+

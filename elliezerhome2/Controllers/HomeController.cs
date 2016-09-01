@@ -10,7 +10,8 @@ namespace elliezerhome2.Controllers
 {
     public class HomeController : Controller
     {
-        private WorkContext db = new WorkContext();
+        private WorkContext dbWorks = new WorkContext();
+        private GalleryContext dbGalleries = new GalleryContext();
 
         public ActionResult Index()
         {
@@ -32,10 +33,11 @@ namespace elliezerhome2.Controllers
             ViewBag.Artist = eli_ezer;
 
 
-            IList<Work> works = db.Works.Where(p => p.IsHome == true).ToList();
+            IList<Work> works = dbWorks.Works.Where(p => p.IsHome == true).ToList();
 
             return View(works);
         }
+
 
         public ActionResult MyWorks(string selectworks)
         {
@@ -43,25 +45,57 @@ namespace elliezerhome2.Controllers
             //выбираем все работы
             if (selectworks == "all")
             {
-                IList<Work> all_works = db.Works.ToList();
+                IList<Work> all_works = dbWorks.Works.ToList();
                 return View(all_works);
             }
             //выбираем только картины
             else if (selectworks == "paintings")
             {
-                IList<Work> paintings = db.Works.Where(p => p.IsPainting == true).ToList();
+                IList<Work> paintings = dbWorks.Works.Where(p => p.IsPainting == true).ToList();
                 return View(paintings);
             }
             //все работы кроме картин
             else if (selectworks == "other")
             {
-                IList<Work> other_works = db.Works.Where(p => p.IsPainting == false).ToList();
+                IList<Work> other_works = dbWorks.Works.Where(p => p.IsPainting == false).ToList();
                 return View(other_works);
             }
             else
             {
                 return View();
             }
+        }
+
+        public ActionResult WorkInfo(int id)
+        {
+            Work work = dbWorks.Works.Find(id);
+
+            if (work != null)
+                ViewBag.Title = work.Name;
+
+            return View(work);
+        }
+
+        public ActionResult ArtistInfo()
+        {
+            XDocument xDoc = XDocument.Load(Server.MapPath("~/App_Data/") + "Artist.xml");
+            XElement xArtist = xDoc.Element("artist");
+
+            Artist eli_ezer = new Artist();
+            if (xArtist.Elements("biography").ToList().Count != 0)
+                eli_ezer.biography = xArtist.Elements("biography").ToList()[0].Value;
+
+
+            IList<XElement> xPhotos = xArtist.Elements("photos").ToList();
+            if (xPhotos.Count != 0)
+            {
+                IList<XElement> xPhotoList = xPhotos[0].Elements("photo").ToList();
+
+                foreach (XElement xE in xPhotoList)
+                    eli_ezer.Photos.Add(xE.Value);
+            }
+
+            return View(eli_ezer);
         }
 
 
@@ -136,47 +170,20 @@ namespace elliezerhome2.Controllers
         }
 
 
-        public ActionResult InformationPage(int id)
+        public ActionResult Galleries()
         {
-            IEnumerable<Work> paintings = db.Works;
-            Work work = db.Works.Find(id);
-
-            if (work != null)
-            {
-                ViewBag.Title = work.Name;
-
-            }
-
-
-
-            return View(work);
+            IList<Gallery> galleries = dbGalleries.Galleries.ToList();
+            return View(galleries);
         }
 
-        public ActionResult ArtistInfo()
+        public ActionResult OneGallery(int id)
         {
-            XDocument xDoc = XDocument.Load(Server.MapPath("~/App_Data/") + "Artist.xml");
-            XElement xArtist = xDoc.Element("artist");
+            Gallery gallery = dbGalleries.Galleries.Find(id);
 
-            Artist eli_ezer = new Artist();
-            if (xArtist.Elements("biography").ToList().Count != 0)
-                eli_ezer.biography = xArtist.Elements("biography").ToList()[0].Value;
+            if (gallery != null)
+                ViewBag.Title = gallery.Name;
 
-
-            IList<XElement> xPhotos = xArtist.Elements("photos").ToList();
-            if (xPhotos.Count != 0)
-            {
-                IList<XElement> xPhotoList = xPhotos[0].Elements("photo").ToList();
-
-                foreach (XElement xE in xPhotoList)
-                    eli_ezer.Photos.Add(xE.Value);
-            }
-
-            return View(eli_ezer);
-        }
-
-        public ActionResult OneGallery()
-        {
-            return View();
+            return View(gallery);
         }
 
     }

@@ -1,7 +1,43 @@
-﻿
+﻿@model eliezerhome2.Models.Gallery
+
 @{
-    ViewBag.Title = "AddGallery";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>AddGallery</h2>
+<div class="link-administrator">
+    @Html.ActionLink("Back to list", "Galleries", "Administrator")
+</div>
+
+<div id="valid_message">
+    @ViewBag.Message
+</div>
+
+@using (Html.BeginForm("AddGallery", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "adding-form-gallery" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <p class="center">Додати на сайт нову роботу</p>
+
+    <div class="editor-label">Ім'я  галереї:</div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { id = "Name" } })
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="editor-label">Фото галереї:</div>
+    <div class="editor-field" id="input_files">
+        <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+        <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
+        <div id="images-line"></div>
+    </div>
+
+    <div class="button-send">
+        <input type="reset" value="Очистить" />
+        <input type="submit" value="Я все заповнила!" />
+    </div>
+
+}
+
+@Scripts.Render("~/Scripts/administrator.adding.work.js")
+
 

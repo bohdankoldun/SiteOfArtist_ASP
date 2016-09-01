@@ -57,7 +57,7 @@ else
                     }
 
                     <div class="btn-more">
-                        <a class="btn btn-default" href="/Home/InformationPage?id=@Model[i*4+j].WorkId">More &raquo;</a>
+                        <a class="btn btn-default" href="/Home/WorkInfo?id=@Model[i*4+j].WorkId">More &raquo;</a>
                     </div>
                 </div>
 
@@ -86,14 +86,11 @@ else
                     <pre>@text</pre>
                 }
                 <div class="btn-more">
-                    <a class="btn btn-default" href="/Home/InformationPage?id=@Model[i].WorkId">More &raquo;</a>
+                    <a class="btn btn-default" href="/Home/WorkInfo?id=@Model[i].WorkId">More &raquo;</a>
                 </div>
             </div>
 
         }
     </div>
-
-
-
 
 }

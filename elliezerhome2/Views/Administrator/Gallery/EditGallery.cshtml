@@ -5,20 +5,23 @@
 }
 
 <div class="link-administrator">
-    @Html.ActionLink("Back to list", "Works", "Administrator")
+    @Html.ActionLink("Back to list", "Works")
 </div>
 
 <div id="valid_message">
     @ViewBag.Message
 </div>
 
-<div class="form-for-adding">
-    @using (Html.BeginForm("AddWork", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "adding_form" }))
+<div class="form-for-editing">
+
+    @using (Html.BeginForm("~/Views/Administrator/Work/DeleteWorkPhotos.cshtml","Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing_form" }))
             {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         <fieldset>
-            <legend>Додати на сайт нову роботу</legend>
+            <legend>Редагувати дану роботу</legend>
+
+            @Html.HiddenFor(model => model.WorkId)
 
             <div class="editor-label">Ім'я  роботи:</div>
             <div class="editor-field">
@@ -36,11 +39,11 @@
             <div class="editor-label">Опис роботи:</div>
             <div class="editor-field">
                 @Html.TextAreaFor(model => model.Comment, new
-               {
-                   width = "100%",
-                   id = "DescribeText",
-                   onkeyup = "resizeTextarea('DescribeText')"
-               })
+           {
+               width = "100%",
+               id = "DescribeText",
+               onkeyup = "resizeTextarea('DescribeText')"
+           })
                 @Html.ValidationMessageFor(model => model.Comment)
             </div>
 
@@ -62,22 +65,63 @@
                 @Html.ValidationMessageFor(model => model.IsHome)
             </div>
 
-            <div class="editor-label">Фото роботи:</div>
+
+
+            <div class="editor-label">Додати нові фото роботи:</div>
             <div class="editor-field" id="input_files">
                 <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
                 <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
-                <div id="images-line"></div>
+                <ol id="list_upload_image"></ol>
             </div>
 
             <div class="button-send">
-                <input type="reset" value="Очистить" />
-                <input type="submit" value="Я все заповнила!" />
+                <input type="submit" value="Зберегти зміни!" />
             </div>
 
         </fieldset>
     }
 </div>
 
-@Scripts.Render("~/Scripts/administrator.adding.work.js")
+@if (Model != null)
+{
+    <div class="delete-photos-work">
+        <div id="results">
+            <p>Виділіть червоним фото, які потрібно видалити!</p>
+            @for (int i = 0; i < Model.Photos.Count - 1; i += 2)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="@("/Paintings/" + @Model.Photos[i].URL)" width="100%" alt="photo" />
+                    </div>
+                    <div class="col-md-6">
+                        <img src="@("/Paintings/" + @Model.Photos[i + 1].URL)" width="100%" alt="photo" />
+                    </div>
+                </div>
 
+            }
+
+            @if (Model.Photos.Count % 2 > 0)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="@("/Paintings/" + @Model.Photos[Model.Photos.Count - 1].URL)" width="100%" alt="photo" />
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        @using (Ajax.BeginForm(" DeleteWorkPhotos", new AjaxOptions { UpdateTargetId = "results" }))
+        {
+            @Html.Hidden("id", @Model.WorkId)
+            <div class="button-send">
+                <input type="submit" value="Видалити" />
+            </div>
+        }
+
+    </div>
+}
+
+
+@Scripts.Render("~/Scripts/administrator.editing.work.js")
 

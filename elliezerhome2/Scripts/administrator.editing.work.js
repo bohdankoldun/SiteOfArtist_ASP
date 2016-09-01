@@ -38,18 +38,19 @@ addEventListener('DOMContentLoaded', init);
 /* -------------------------------------------------------------------------*/
 
 
+
 /* adding and showing photos*/
 
 function showFile(e) {
     var files = e.target.files;
-    var listImages = document.getElementById('list_upload_image')
+    var listImages = document.getElementById('images-line')
 
     //add new input for image
     var oldInput = e.target;
     var newInput = oldInput.cloneNode(true);
 
     //add new input and add listener to it
-    document.getElementById('input_files').insertBefore(newInput, listImages);
+    document.getElementById('input_files').insertBefore(newInput, null);
     newInput.addEventListener('change', showFile, false);
 
     //hide old input
@@ -61,9 +62,10 @@ function showFile(e) {
         var fr = new FileReader();
         fr.onload = (function (theFile) {
             return function (e) {
-                var li = document.createElement('li');
-                li.innerHTML = "<img src='" + e.target.result + "' />";
-                listImages.insertBefore(li, null);
+                var image = document.createElement('img');
+                image.src = e.target.result;
+                image.style.border = "3px solid green";
+                listImages.insertBefore(image, null);
             };
         })(f);
 
@@ -73,7 +75,6 @@ function showFile(e) {
     //hide warning
     $('span[data-valmsg-for="Photos"]').text('');
 }
-
 //add listner to first input element
 var input_file = document.getElementsByClassName('files')[0];
 input_file.addEventListener('change', showFile, false);

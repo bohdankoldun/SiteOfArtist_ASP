@@ -14,20 +14,23 @@ namespace eliezerhome2.Controllers
     [Authorize]
     public class AdministratorController : Controller
     {
-        //создаем обьект контекста для связи з бд
-        private WorkContext db = new WorkContext();
+        //создаем обьекты контекста для связи з бд
+        private WorkContext dbWorks = new WorkContext();
+        private GalleryContext dbGalleries = new GalleryContext();
 
         public ActionResult Index()
         {
             return View();
         }
 
+
         public ActionResult Works()
         {
             @ViewBag.Title = "List of works";
-            IList<Work> works = db.Works.ToList();
-            return View(works);
+            IList<Work> works = dbWorks.Works.ToList();
+            return View("~/Views/Administrator/Work/Works.cshtml", works);
         }
+
 
         #region методы добавления работы
 
@@ -36,7 +39,7 @@ namespace eliezerhome2.Controllers
         {
             @ViewBag.Title = "Add work";
 
-            return View();
+            return View("~/Views/Administrator/Work/AddWork.cshtml");
         }
 
         [HttpPost]
@@ -55,12 +58,12 @@ namespace eliezerhome2.Controllers
                     image.SaveAs(path);
 
                     path_for_html = new_work.Name + "_" + Path.GetFileName(image.FileName);
-                    db.Photos.Add(new Photo { URL = path_for_html, Work = new_work });
+                    dbWorks.Photos.Add(new WorkPhoto { URL = path_for_html, Work = new_work });
 
                 }
 
-                db.Works.Add(new_work);
-                db.SaveChanges();
+                dbWorks.Works.Add(new_work);
+                dbWorks.SaveChanges();
 
                 return RedirectToAction("Works");
             }
@@ -68,23 +71,23 @@ namespace eliezerhome2.Controllers
             ViewBag.Message = "Your data are not valid! Please, correct and add photos!";
             @ViewBag.Title = "Add work";
 
-            return View(new_work);
+            return View("~/Views/Administrator/Work/AddWork.cshtml", new_work);
         }
 
         #endregion
 
 
-        #region редактирование работ!
+        #region редактирование работ
 
         [HttpGet]
         public ActionResult EditWork(int id)
         {
             //находим редактируемую работу и передаем ее у представление
-            Work work = db.Works.Find(id);
+            Work work = dbWorks.Works.Find(id);
 
             @ViewBag.Title = "Edit work";
 
-            return View(work);
+            return View("~/Views/Administrator/Work/EditWork.cshtml", work);
         }
 
         [HttpPost]
@@ -92,11 +95,10 @@ namespace eliezerhome2.Controllers
         public ActionResult EditWork(Work edited_work, bool[] deletePhotos, IList<HttpPostedFileBase> uploadImages)
         {
             //find edited work
-            Work edited_work_db = db.Works.Find(edited_work.WorkId);
+            Work edited_work_db = dbWorks.Works.Find(edited_work.WorkId);
 
             if (ModelState.IsValid && edited_work_db != null)
             {
-
                 //change field of the work
                 edited_work_db.Name = edited_work.Name;
                 edited_work_db.Date = edited_work.Date;
@@ -115,12 +117,12 @@ namespace eliezerhome2.Controllers
                     image.SaveAs(path);
 
                     path_for_html = edited_work.Name + "_" + Path.GetFileName(image.FileName);
-                    db.Photos.Add(new Photo { URL = path_for_html, Work = edited_work_db });
+                    dbWorks.Photos.Add(new WorkPhoto { URL = path_for_html, Work = edited_work_db });
 
                 }
 
                 //save changes
-                db.SaveChanges();
+                dbWorks.SaveChanges();
 
                 return RedirectToAction("Works");
             }
@@ -128,9 +130,47 @@ namespace eliezerhome2.Controllers
             ViewBag.Message = "Your data are not valid! Please, correct!";
             @ViewBag.Title = "Edit work";
 
-            return View(edited_work);
+            return View("~/Views/Administrator/Work/EditWork.cshtml", edited_work);
         }
 
+        /// <summary>
+        /// для удаления фото изменяемой работы
+        /// </summary>
+        /// <param name="id"> id  изменяемой работы</param>
+        /// <param name="url"> массив url фото, которые мы удаляем</param>
+        [HttpPost]
+        public ActionResult DeleteWorkPhotos(int id, string[] url)
+        {
+            var work = dbWorks.Works.Find(id);
+
+
+            if (url != null)
+            {
+
+                foreach (string scr in url)
+                {
+                    foreach (WorkPhoto p in work.Photos)
+                    {
+                        if (work.Photos.Count == 1)
+                        {
+                            ViewBag.Message = "Потрібно, щоб залишилось одне фото!";
+                            return PartialView("~/Views/Administrator/Work/DeleteWorkPhotos.cshtml", work.Photos);
+                        }
+                        if (("/Paintings/" + p.URL) == scr)
+                        {
+                            string path = Server.MapPath("~/Paintings/") + p.URL;
+                            System.IO.File.Delete(path);
+                            dbWorks.Photos.Remove(p);
+                            dbWorks.SaveChanges();
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            return PartialView("~/Views/Administrator/Work/DeleteWorkPhotos.cshtml", work.Photos);
+        }
 
         #endregion
 
@@ -140,9 +180,9 @@ namespace eliezerhome2.Controllers
         public ActionResult DeleteWorkShow(int id)
         {
             //находим удаляемую работу и передаем ее у представление
-            Work work = db.Works.Find(id);
+            Work work = dbWorks.Works.Find(id);
 
-            return View(work);
+            return View("~/Views/Administrator/Work/DeleteWorkShow.cshtml", work);
         }
 
 
@@ -152,21 +192,21 @@ namespace eliezerhome2.Controllers
             string result = "";
 
             //находим удаляему работу и url всех фото к ней
-            Work work = db.Works.Find(id);
-            IEnumerable<Photo> photos = db.Photos.Where(p => p.WorkId == id).ToList();
+            Work work = dbWorks.Works.Find(id);
+            IEnumerable<WorkPhoto> photos = dbWorks.Photos.Where(p => p.WorkId == id).ToList();
 
             if (work != null)
             {
                 //удаляем фото
-                foreach (Photo p in photos)
+                foreach (WorkPhoto p in photos)
                 {
                     string path = Server.MapPath("~/Paintings/") + p.URL;
                     System.IO.File.Delete(path);
                 }
 
                 //удаляем саму работу из бд
-                db.Works.Remove(work);
-                db.SaveChanges();
+                dbWorks.Works.Remove(work);
+                dbWorks.SaveChanges();
                 result = "Congrats! Work was deleted!";
 
             }
@@ -176,7 +216,59 @@ namespace eliezerhome2.Controllers
             //записуем строку результата в ViewBag
             ViewBag.result = result;
 
-            return View();
+            return View("~/Views/Administrator/Work/DeleteWorkDo.cshtml");
+        }
+
+        #endregion
+
+        public ActionResult Galleries()
+        {
+            @ViewBag.Title = "List of galleris";
+            IList<Gallery> galleris = dbGalleries.Galleries.ToList();
+            return View("~/Views/Administrator/Gallery/Galleries.cshtml", galleris);
+        }
+
+
+        #region методы добавления галерей
+
+        [HttpGet]
+        public ActionResult AddGallery()
+        {
+            @ViewBag.Title = "Add gallery";
+
+            return View("~/Views/Administrator/Gallery/AddGallery.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddGallery(Gallery new_gallery, IList<HttpPostedFileBase> uploadImages)
+        {
+            if (ModelState.IsValid && uploadImages[0] != null)
+            {
+                string path = "", path_for_html = "";
+
+                foreach (var image in uploadImages)
+                {
+                    if (image == null) continue;
+
+                    path = Server.MapPath("~/GalleryPhotos/") + new_gallery.Name + "_" + Path.GetFileName(image.FileName);
+                    image.SaveAs(path);
+
+                    path_for_html = new_gallery.Name + "_" + Path.GetFileName(image.FileName);
+                    dbGalleries.Photos.Add(new GalleryPhoto { URL = path_for_html, Comment ="cv", Gallery = new_gallery });
+
+                }
+
+                dbGalleries.Galleries.Add(new_gallery);
+                dbGalleries.SaveChanges();
+
+                return RedirectToAction("Galleries");
+            }
+
+            ViewBag.Message = "Your data are not valid! Please, correct and add photos!";
+            @ViewBag.Title = "Add gallery";
+
+            return View("~/Views/Administrator/Gallery/AddGallery.cshtml", new_gallery);
         }
 
         #endregion
@@ -253,7 +345,6 @@ namespace eliezerhome2.Controllers
             return View(eli_ezer);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditArtistSave(Artist eli_ezer, string[] url, IList<HttpPostedFileBase> uploadImages)
@@ -292,8 +383,6 @@ namespace eliezerhome2.Controllers
 
                         string path = Server.MapPath("~/MyPhotos/") + path_for_html;
                         image.SaveAs(path);
-
-                        
 
                         // добавляем новый элемент в файл xml
                         xPhotos[0].Add(new XElement("photo", path_for_html));
@@ -395,49 +484,12 @@ namespace eliezerhome2.Controllers
 
         #endregion
 
-        /// <summary>
-        /// для удаления фото изменяемой работы
-        /// </summary>
-        /// <param name="id"> id  изменяемой работы</param>
-        /// <param name="url"> массив url фото, которые мы удаляем</param>
-        public ActionResult DeletePhoto(int id, string[] url)
-        {
-            var work = db.Works.Find(id);
-
-
-            if (url != null)
-            {
-
-                foreach (string scr in url)
-                {
-                    foreach (Photo p in work.Photos)
-                    {
-                        if (work.Photos.Count == 1)
-                        {
-                            ViewBag.Message = "Потрібно, щоб залишилось одне фото!";
-                            return PartialView(work.Photos);
-                        }
-                        if (("/Paintings/" + p.URL) == scr)
-                        {
-                            string path = Server.MapPath("~/Paintings/") + p.URL;
-                            System.IO.File.Delete(path);
-                            db.Photos.Remove(p);
-                            db.SaveChanges();
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-            return PartialView(work.Photos);
-        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                dbWorks.Dispose();
             }
             base.Dispose(disposing);
         }
