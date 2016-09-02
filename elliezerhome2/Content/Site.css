@@ -177,6 +177,7 @@ li > img {
         background-color: #0c02ed;
         background-image: linear-gradient(to bottom, #0f72bb, #0c02ed);
         border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
         text-align: center;
         color: #f3fc12;
         font-weight: bold;
@@ -292,6 +293,7 @@ input.input-validation-error {
     margin-top: 80px;
     margin-left: 5px;
     border-radius: 7px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     color: black;
     font-weight: bold;
 }
@@ -338,13 +340,16 @@ input.input-validation-error {
         margin: 5px 5px;
     }
 
-#green-text {
-    color: #28790c;
-    font-weight: bold;
-    text-align: center;
-    background-color: #f7ff34;
-    border-radius: 5px;
+#change-text {
+    margin: 20px;
     padding: 5px;
+    color: #0c02ed;
+    font-weight:900;
+    text-align: center;
+    background-color: #d7ffd8;
+    border:1px solid #6bef1b;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 /*-------------------------------------------------------------------*/
 

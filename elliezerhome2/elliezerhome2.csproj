@@ -170,7 +170,6 @@
     <Content Include="App_Data\DB.sdf" />
     <Content Include="Content\blueimp-gallery.min.css" />
     <Content Include="Content\bootstrap-image-gallery.min.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\my_bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -180,6 +179,7 @@
     <Content Include="MyPhotos\IMG_20160314_141803971.jpg" />
     <Content Include="MyPhotos\IMG_20160629_132121384.jpg" />
     <Content Include="Scripts\administrator.editing.artist.js" />
+    <Content Include="Scripts\administrator.gallery.js" />
     <Content Include="Scripts\bootstrap-image-gallery.js" />
     <Content Include="Scripts\bootstrap-image-gallery.min.js" />
     <Content Include="Scripts\bootstrap.js" />

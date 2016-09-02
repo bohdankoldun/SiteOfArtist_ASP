@@ -2,7 +2,7 @@
 
 @if (ViewBag.Message != null)
 {
-    <p id="green-text">@(ViewBag.Message)</p>
+    <p id="change-text">@(ViewBag.Message)</p>
 }
 @using (Html.BeginForm("EditArtistSave", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-editing-artist" }))
 {
@@ -10,7 +10,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     <div class="form-horizontal">
-        <h4>Artist Eli-Ezer</h4>
+        <h2>Artist Eli-Ezer</h2>
         <hr />
         <div class="editor-label">Інформація про мене:</div>
         <div class="editor-field">

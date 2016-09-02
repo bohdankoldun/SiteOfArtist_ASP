@@ -2,13 +2,14 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
-<div class="link-administrator" style="display:inline">
+<h2>Administrator Menu</h2>
+<div class="link-administrator">
+    <hr />
     @Html.ActionLink("Мої роботи", "Works", "Administrator")
-    <br/>
-    @Html.ActionLink("Галереї фото", "Galleries", "Administrator")
-    <br/>
-    @Html.ActionLink("Редагувати інформацію про мене", "EditArtist", "Administrator")
+    <hr/>
+    @Html.ActionLink("Фотогалереї", "Galleries", "Administrator")
+    <hr/>
+    @Html.ActionLink("Інформація про художника", "EditArtist", "Administrator")
 </div>
 
 

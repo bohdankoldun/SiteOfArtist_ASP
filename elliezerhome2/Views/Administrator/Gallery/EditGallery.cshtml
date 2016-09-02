@@ -1,127 +1,60 @@
-﻿@model eliezerhome2.Models.Work
+﻿@model eliezerhome2.Models.Gallery
 
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <div class="link-administrator">
-    @Html.ActionLink("Back to list", "Works")
+    @Html.ActionLink("Back to list", "Galleries")
 </div>
 
-<div id="valid_message">
-    @ViewBag.Message
-</div>
-
-<div class="form-for-editing">
-
-    @using (Html.BeginForm("~/Views/Administrator/Work/DeleteWorkPhotos.cshtml","Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing_form" }))
-            {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        <fieldset>
-            <legend>Редагувати дану роботу</legend>
-
-            @Html.HiddenFor(model => model.WorkId)
-
-            <div class="editor-label">Ім'я  роботи:</div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { id = "Name" } })
-                @Html.ValidationMessageFor(model => model.Name)
-            </div>
-
-            <div class="editor-label">Дата:</div>
-            <div class="editor-field">
-
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { type = "month", id = "Date" } })
-                @Html.ValidationMessageFor(model => model.Date)
-            </div>
-
-            <div class="editor-label">Опис роботи:</div>
-            <div class="editor-field">
-                @Html.TextAreaFor(model => model.Comment, new
-           {
-               width = "100%",
-               id = "DescribeText",
-               onkeyup = "resizeTextarea('DescribeText')"
-           })
-                @Html.ValidationMessageFor(model => model.Comment)
-            </div>
-
-            <div class="editor-label">Ціна в доларах(якщо така є):</div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Price)
-            </div>
-
-            <div class="editor-label">
-                Це картина:
-                @Html.EditorFor(model => model.IsPainting)
-                @Html.ValidationMessageFor(model => model.IsPainting)
-            </div>
-
-
-            <div class="editor-label">
-                Показувать на сторинці Home:
-                @Html.EditorFor(model => model.IsHome)
-                @Html.ValidationMessageFor(model => model.IsHome)
-            </div>
-
-
-
-            <div class="editor-label">Додати нові фото роботи:</div>
-            <div class="editor-field" id="input_files">
-                <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
-                <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
-                <ol id="list_upload_image"></ol>
-            </div>
-
-            <div class="button-send">
-                <input type="submit" value="Зберегти зміни!" />
-            </div>
-
-        </fieldset>
-    }
-</div>
-
-@if (Model != null)
+@using (Html.BeginForm("EditGallery", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing-form-gallery" }))
 {
-    <div class="delete-photos-work">
-        <div id="results">
-            <p>Виділіть червоним фото, які потрібно видалити!</p>
-            @for (int i = 0; i < Model.Photos.Count - 1; i += 2)
-            {
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[i].URL)" width="100%" alt="photo" />
-                    </div>
-                    <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[i + 1].URL)" width="100%" alt="photo" />
-                    </div>
-                </div>
 
-            }
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="form-horizontal">
 
-            @if (Model.Photos.Count % 2 > 0)
-            {
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="@("/Paintings/" + @Model.Photos[Model.Photos.Count - 1].URL)" width="100%" alt="photo" />
+        @if (ViewBag.Message != null)
+        {
+            <p id="change-text">@(ViewBag.Message)</p>
+        }
+        <h3>Редагувати галерею</h3>
+        <hr />
 
-                    </div>
-                </div>
-            }
+        @Html.HiddenFor(model => model.GalleryId)
+
+        <div class="editor-label">Ім'я галереї:</div>
+        <div class="editor-field">
+            @Html.ValidationMessageFor(model => model.Name)
+            @Html.EditorFor(model => model.Name)
         </div>
 
-        @using (Ajax.BeginForm(" DeleteWorkPhotos", new AjaxOptions { UpdateTargetId = "results" }))
-        {
-            @Html.Hidden("id", @Model.WorkId)
-            <div class="button-send">
-                <input type="submit" value="Видалити" />
+        <div class="editor-label">Виділіть червоним фото, які хочете видалить:</div>
+        <div class="editor-field">
+            <div id="images-line">
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Photos.Count; i++)
+                    {
+                        <img src="@("/GalleryPhotos/" + Model.Photos[i].URL)" />
+                    }
+                }
             </div>
-        }
+            <br />
+            <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true">@ViewBag.MessageDelPhotos</span>
+        </div>
+        <div class="editor-label">Додати нові фото:</div>
+        <div class="editor-field" id="input_files">
+            <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+        </div>
+        <hr />
+
+        <div class="button-send">
+            <input type="submit" value="Зберегти зміни!" />
+        </div>
 
     </div>
 }
 
-
-@Scripts.Render("~/Scripts/administrator.editing.work.js")
-
+@Scripts.Render("~/Scripts/administrator.gallery.js")

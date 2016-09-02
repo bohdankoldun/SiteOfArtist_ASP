@@ -7,16 +7,18 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <hr />
+<div class="link-administrator center">
+    @Html.ActionLink("Delete", "DeleteWorkDo", "Administrator", new { id = Model.WorkId }, new { @class = "delete" }) |
+    @Html.ActionLink("Back to list", "Works", "Administrator")
+</div>
+<hr />
 <p class="center">
     "@Html.DisplayFor(model => model.Name)"
 </p>
 <p class="center">
     <img width="50%" src="@("/Paintings/" + Model.Photos[0].URL)" alt="Photo" />
 </p>
-<hr/>
 
-<div class="link-administrator center">
-    @Html.ActionLink("Delete", "DeleteWorkDo", "Administrator", new { id = Model.WorkId }, new { @class = "delete" }) |
-    @Html.ActionLink("Back o list", "Works", "Administrator")
-</div>
+
+
 

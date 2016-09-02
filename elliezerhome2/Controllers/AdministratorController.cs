@@ -92,7 +92,7 @@ namespace eliezerhome2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditWork(Work edited_work, bool[] deletePhotos, IList<HttpPostedFileBase> uploadImages)
+        public ActionResult EditWork(Work edited_work, IList<HttpPostedFileBase> uploadImages)
         {
             //find edited work
             Work edited_work_db = dbWorks.Works.Find(edited_work.WorkId);
@@ -221,6 +221,7 @@ namespace eliezerhome2.Controllers
 
         #endregion
 
+
         public ActionResult Galleries()
         {
             @ViewBag.Title = "List of galleris";
@@ -229,7 +230,7 @@ namespace eliezerhome2.Controllers
         }
 
 
-        #region методы добавления галерей
+        #region методы добавления, редактирования, удаления галерей
 
         [HttpGet]
         public ActionResult AddGallery()
@@ -251,11 +252,13 @@ namespace eliezerhome2.Controllers
                 {
                     if (image == null) continue;
 
-                    path = Server.MapPath("~/GalleryPhotos/") + new_gallery.Name + "_" + Path.GetFileName(image.FileName);
+                    path_for_html = new_gallery.Name + "_" + DateTime.Now.Millisecond + Path.GetFileName(image.FileName);
+
+                    path = Server.MapPath("~/GalleryPhotos/") + path_for_html;
                     image.SaveAs(path);
 
-                    path_for_html = new_gallery.Name + "_" + Path.GetFileName(image.FileName);
-                    dbGalleries.Photos.Add(new GalleryPhoto { URL = path_for_html, Comment ="cv", Gallery = new_gallery });
+
+                    dbGalleries.Photos.Add(new GalleryPhoto { URL = path_for_html, Comment = "cv", Gallery = new_gallery });
 
                 }
 
@@ -270,6 +273,118 @@ namespace eliezerhome2.Controllers
 
             return View("~/Views/Administrator/Gallery/AddGallery.cshtml", new_gallery);
         }
+
+        [HttpGet]
+        public ActionResult EditGallery(int id)
+        {
+            //находим редактируемую галерею и передаем ее у представление
+            Gallery gallery = dbGalleries.Galleries.Find(id);
+
+            @ViewBag.Title = "Edit gallery";
+
+            return View("~/Views/Administrator/Gallery/EditGallery.cshtml", gallery);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditGallery(Gallery edited_gallery, string[] url, IList<HttpPostedFileBase> uploadImages)
+        {
+            //find edited gallery
+            Gallery edited_gallery_db = dbGalleries.Galleries.Find(edited_gallery.GalleryId);
+
+            if (ModelState.IsValid && edited_gallery_db != null)
+            {
+                //change name of tht gallery
+                edited_gallery_db.Name = edited_gallery.Name;
+
+                //add new photos
+                foreach (var image in uploadImages)
+                {
+                    if (image == null) continue;
+
+                    string path_for_html = edited_gallery.Name + "_" + DateTime.Now.Millisecond + Path.GetFileName(image.FileName);
+                    string path = Server.MapPath("~/GalleryPhotos/") + path_for_html;
+                    image.SaveAs(path);
+
+                    dbGalleries.Photos.Add(new GalleryPhoto { URL = path_for_html, Comment = path, Gallery = edited_gallery_db });
+
+                }
+
+                //save changes
+                dbGalleries.SaveChanges();
+                ViewBag.Message = "Зміни збереженні!";
+
+                //delete chosen photos
+                if (url != null)
+                {
+
+                    foreach (string scr in url)
+                    {
+                        foreach (GalleryPhoto p in edited_gallery_db.Photos)
+                        {
+                            if (edited_gallery_db.Photos.Count == 1)
+                            {
+                                ViewBag.MessageDelPhotos = "Потрібно, щоб залишилось одне фото!";
+                                return View("~/Views/Administrator/Gallery/EditGallery.cshtml", edited_gallery_db);
+                            }
+                            if (("/GalleryPhotos/" + p.URL) == scr)
+                            {
+                                try
+                                {
+                                    string path = Server.MapPath("~/GalleryPhotos/") + p.URL;
+                                    System.IO.File.Delete(path);
+                                    dbGalleries.Photos.Remove(p);
+                                    dbGalleries.SaveChanges();
+                                    break;
+                                }
+                                catch(Exception e)
+                                {
+                                    break;
+                                }
+                               
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @ViewBag.Title = "Edit gallery";
+            return View("~/Views/Administrator/Gallery/EditGallery.cshtml", edited_gallery_db);
+        }
+
+        public ActionResult DeleteGallery(int id)
+        {
+
+            Gallery gallery = dbGalleries.Galleries.Find(id);
+
+            return View("~/Views/Administrator/Gallery/DeleteGallery.cshtml", gallery);
+        }
+
+        public ActionResult DeleteGalleryDo(int id)
+        {
+            //находим удаляему работу и url всех фото к ней
+            Gallery gallery = dbGalleries.Galleries.Find(id);
+            IEnumerable<GalleryPhoto> photos = dbGalleries.Photos.Where(p => p.GalleryId == id).ToList();
+
+            if (gallery != null)
+            {
+                //удаляем фото
+                foreach (GalleryPhoto p in photos)
+                {
+                    string path = Server.MapPath("~/GalleryPhotos/") + p.URL;
+                    System.IO.File.Delete(path);
+                }
+
+                //удаляем саму работу из бд
+                dbGalleries.Galleries.Remove(gallery);
+                dbGalleries.SaveChanges();
+
+            }
+
+            return RedirectToAction("Galleries");
+        }
+
 
         #endregion
 
@@ -363,7 +478,7 @@ namespace eliezerhome2.Controllers
                 xArtist.Add(new XElement("photos"));
                 xPhotos = xArtist.Elements("photos").ToList();
             }
-          
+
 
             if (ModelState.IsValid)
             {

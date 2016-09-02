@@ -14,7 +14,7 @@
 
 <div class="form-for-editing">
 
-    @using (Html.BeginForm("~DeleteWorkPhotos","Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing_form" }))
+    @using (Html.BeginForm("EditWork","Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing-work-form" }))
             {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
