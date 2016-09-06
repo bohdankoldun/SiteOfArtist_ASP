@@ -28,6 +28,11 @@ namespace elliezerhome2
                       "~/Scripts/bootstrap-image-gallery*"
                       ));
 
+            bundles.Add(new ScriptBundle("~/bundles/timer").Include(
+                    "~/Scripts/Gulpfile.js",
+                    "~/Scripts/jquery.time-to*"
+                    ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/my_bootstrap.css",
                       "~/Content/Site.css"));

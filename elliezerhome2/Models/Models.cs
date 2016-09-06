@@ -89,6 +89,44 @@ namespace eliezerhome2.Models
 
     #endregion
 
+    #region модели для событий 
+
+    public class Event
+    {
+        [Key]
+        public int EventId { get; set; }
+
+        [Required(ErrorMessage = "Name must be set!")]
+        public string Name { get; set; }
+
+        public string Comment { get; set; }
+
+        [DataType(DataType.Date, ErrorMessage = "Date only")]
+        public DateTime Date { get; set; }
+
+        public virtual IList<EventPhoto> Photos { get; set; }
+
+        public Event()
+        {
+            Photos = new List<EventPhoto>();
+        }
+    }
+
+    public class EventPhoto
+    {
+        [Key]
+        public int PhotoId { get; set; }
+
+        [Required]
+        public string URL { get; set; }
+
+        public int EventId { get; set; }
+        [ForeignKey("EventId")]
+        public Event Event { get; set; }
+    }
+
+    #endregion
+
     //модель информации об художнике
     public class Artist
     {
@@ -140,6 +178,15 @@ namespace eliezerhome2.Models
 
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<GalleryPhoto> Photos { get; set; }
+
+    }
+
+    public class EventContext : DbContext
+    {
+        public EventContext() : base("DefaultConnection") { }
+
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventPhoto> Photos { get; set; }
 
     }
     #endregion

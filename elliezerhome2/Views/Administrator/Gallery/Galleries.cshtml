@@ -64,7 +64,7 @@
 
                 <p>
                     @Html.ActionLink("Edit", "EditGallery", "Administrator", new { id = @Model[i].GalleryId }, new { @class = "edit" })
-                    @Html.ActionLink("Delete", "Deletegallery", "Administrator", new { id = @Model[i].GalleryId }, new { @class = "delete" })
+                    @Html.ActionLink("Delete", "DeleteGallery", "Administrator", new { id = @Model[i].GalleryId }, new { @class = "delete" })
                 </p>
             </div>
         }

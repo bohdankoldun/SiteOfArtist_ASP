@@ -12,6 +12,7 @@ namespace elliezerhome2.Controllers
     {
         private WorkContext dbWorks = new WorkContext();
         private GalleryContext dbGalleries = new GalleryContext();
+        private EventContext dbEvents = new EventContext();
 
         public ActionResult Index()
         {
@@ -185,6 +186,23 @@ namespace elliezerhome2.Controllers
 
             return View(gallery);
         }
+
+        public ActionResult Events()
+        {
+            IList<Event> events = dbEvents.Events.ToList();
+            return View(events);
+        }
+
+        public ActionResult OneEvent(int id)
+        {
+           Event _event = dbEvents.Events.Find(id);
+
+            if (_event != null)
+                ViewBag.Title = _event.Name;
+
+            return View(_event);
+        }
+
 
     }
 }

@@ -17,6 +17,7 @@ namespace eliezerhome2.Controllers
         //создаем обьекты контекста для связи з бд
         private WorkContext dbWorks = new WorkContext();
         private GalleryContext dbGalleries = new GalleryContext();
+        private EventContext dbEvents = new EventContext();
 
         public ActionResult Index()
         {
@@ -388,6 +389,174 @@ namespace eliezerhome2.Controllers
 
         #endregion
 
+
+        public ActionResult Events()
+        {
+            @ViewBag.Title = "List of events";
+            IList<Event> events = dbEvents.Events.ToList();
+            return View("~/Views/Administrator/Event/Events.cshtml", events);
+        }
+
+
+        #region методы добавления, редактирования, удаления событий
+
+        [HttpGet]
+        public ActionResult AddEvent()
+        {
+            @ViewBag.Title = "Add event";
+
+            return View("~/Views/Administrator/Event/AddEvent.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddEvent(Event new_event, IList<HttpPostedFileBase> uploadImages)
+        {
+            if (ModelState.IsValid && uploadImages[0] != null)
+            {
+                string path = "", path_for_html = "";
+
+                foreach (var image in uploadImages)
+                {
+                    if (image == null) continue;
+
+                    path_for_html = new_event.Name + "_" + DateTime.Now.Millisecond + Path.GetFileName(image.FileName);
+
+                    path = Server.MapPath("~/EventPhotos/") + path_for_html;
+                    image.SaveAs(path);
+
+
+                    dbEvents.Photos.Add(new EventPhoto { URL = path_for_html, Event = new_event });
+
+                }
+
+                dbEvents.Events.Add(new_event);
+                dbEvents.SaveChanges();
+
+                return RedirectToAction("Events");
+            }
+
+            ViewBag.Message = "Your data are not valid! Please, correct and add photos!";
+            @ViewBag.Title = "Add  event";
+
+            return View("~/Views/Administrator/Event/AddEvent.cshtml", new_event);
+        }
+
+        [HttpGet]
+        public ActionResult EditEvent(int id)
+        {
+            //находим редактируемую галерею и передаем ее у представление
+            Event _event = dbEvents.Events.Find(id);
+
+            @ViewBag.Title = "Edit event";
+
+            return View("~/Views/Administrator/Event/EditEvent.cshtml", _event);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditEvent(Event edited_event, string[] url, IList<HttpPostedFileBase> uploadImages)
+        {
+            //find edited gallery
+            Event edited_event_db = dbEvents.Events.Find(edited_event.EventId);
+
+            if (ModelState.IsValid && edited_event_db != null)
+            {
+                //change name of tht gallery
+                edited_event_db.Name = edited_event.Name;
+                edited_event_db.Comment = edited_event.Comment;
+                edited_event_db.Date = edited_event.Date;
+
+                //add new photos
+                foreach (var image in uploadImages)
+                {
+                    if (image == null) continue;
+
+                    string path_for_html = edited_event.Name + "_" + DateTime.Now.Millisecond + Path.GetFileName(image.FileName);
+                    string path = Server.MapPath("~/EventPhotos/") + path_for_html;
+                    image.SaveAs(path);
+
+                    dbEvents.Photos.Add(new EventPhoto { URL = path_for_html, Event = edited_event_db });
+
+                }
+
+                //save changes
+                dbEvents.SaveChanges();
+                ViewBag.Message = "Зміни збереженні!";
+
+                //delete chosen photos
+                if (url != null)
+                {
+
+                    foreach (string scr in url)
+                    {
+                        foreach (EventPhoto p in edited_event_db.Photos)
+                        {
+                            if (edited_event_db.Photos.Count == 1)
+                            {
+                                ViewBag.MessageDelPhotos = "Потрібно, щоб залишилось одне фото!";
+                                return View("~/Views/Administrator/Event/EditEvent.cshtml", edited_event_db);
+                            }
+                            if (("/EventPhotos/" + p.URL) == scr)
+                            {
+                                try
+                                {
+                                    string path = Server.MapPath("~/EventPhotos/") + p.URL;
+                                    System.IO.File.Delete(path);
+                                    dbEvents.Photos.Remove(p);
+                                    dbEvents.SaveChanges();
+                                    break;
+                                }
+                                catch (Exception e)
+                                {
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @ViewBag.Title = "Edit event";
+            return View("~/Views/Administrator/Event/EditEvent.cshtml", edited_event_db);
+        }
+
+        public ActionResult DeleteEvent(int id)
+        {
+
+            Event _event = dbEvents.Events.Find(id);
+
+            return View("~/Views/Administrator/Event/DeleteEvent.cshtml", _event);
+        }
+
+        public ActionResult DeleteEventDo(int id)
+        {
+            //находим удаляему работу и url всех фото к ней
+            Event _event = dbEvents.Events.Find(id);
+            IEnumerable<EventPhoto> photos = dbEvents.Photos.Where(p => p.EventId == id).ToList();
+
+            if (_event != null)
+            {
+                //удаляем фото
+                foreach (EventPhoto p in photos)
+                {
+                    string path = Server.MapPath("~/EventPhotos/") + p.URL;
+                    System.IO.File.Delete(path);
+                }
+
+                //удаляем саму работу из бд
+                dbEvents.Events.Remove(_event);
+                dbEvents.SaveChanges();
+
+            }
+
+            return RedirectToAction("Events");
+        }
+
+
+        #endregion
 
         #region редактирование информации об художнике!
 

@@ -1,0 +1,129 @@
+﻿@model eliezerhome2.Models.Event
+@Styles.Render("~/Content/bootstrap_gallery")
+@Scripts.Render("~/bundles/timer")
+
+@if (Model != null)
+{
+
+    ViewBag.Title = Model.Name;
+    int count = Model.Photos.Count;
+
+    <div class="info-painting-page">
+        <h1>@Model.Name. </h1>
+        <p><strong>Date:</strong> 
+           <abbr title="Date">@Model.Date.ToString("f", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</abbr> 
+        </p>
+        <hr />
+        <pre>@Model.Comment</pre>
+        
+
+        @{  
+            DateTime _jan1st1970 = new DateTime(1970, 1, 1);
+            long x = System.Convert.ToInt64((Model.Date - _jan1st1970).TotalMilliseconds);
+            x -= 10800000;
+        }
+        <div id="@Model.Name" class="center"></div>
+        <script>
+
+                            var date = new Date(@x);
+                            // gives you back 2012-04-11T15:46:29+00:00 in a slightly different format, but the timezone info matches UTC/GMT+0
+                            date.toUTCString();
+                            // gives you back your local time
+                            date.toLocaleString();
+                            $('#@Model.Name').timeTo({
+                                timeTo: new Date(date),
+                                displayDays: 2,
+                                theme: "black",
+                                displayCaptions: true,
+                                fontSize: 30,
+                                captionSize: 14
+                            });
+        </script>
+        <hr />
+
+        <!-- The container for the list of example images -->
+        <div id="links">
+            @if (count == 1)
+            {
+                <div id="painting">
+                    <a href="@("/EventPhotos/" + @Model.Photos[0].URL)" title="@Model.Name" data-gallery>
+                        <img src="@("/EventPhotos/" + @Model.Photos[0].URL)" width="40%" class="event-picture" alt="@Model.Name" />
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                for (int i = 0; i < count / 2; i++)
+                {
+                    <div class="row">
+                        @for (int j = 0; j < 2; j++)
+                        {
+                            <div class="col-md-6">
+                                <a href="@("/EventPhotos/" + @Model.Photos[i*2+j].URL)" title="@Model.Name" data-gallery>
+                                    <img src="@("/EventPhotos/" + @Model.Photos[i*2+j].URL)" class="event-picture" width="80%" alt="@Model.Name" />
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+
+
+                <div class="row">
+                    @for (int i = (count / 2) * 2; i < count; i++)
+                    {
+                        <div class="col-md-6">
+                            <a href="@("/EventPhotos/" + @Model.Photos[i].URL)" title="@Model.Name" data-gallery>
+                                <img src="@("/EventPhotos/" + @Model.Photos[i].URL)" class="event-picture" width="80%" alt="@Model.Name" />
+                            </a>
+                        </div>
+                    }
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+    <br>
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false" style="display: none;">
+        <!-- The container for the modal slides -->
+        <div class="slides" style="width: 136600px;"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title">Photos</h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap_gallery")
+
+}
+
+

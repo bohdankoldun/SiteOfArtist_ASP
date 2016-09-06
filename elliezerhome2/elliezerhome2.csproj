@@ -175,9 +175,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="MyPhotos\IMG_20150907_174406351 — копия.jpg" />
-    <Content Include="MyPhotos\IMG_20160314_141803971.jpg" />
-    <Content Include="MyPhotos\IMG_20160629_132121384.jpg" />
     <Content Include="Scripts\administrator.editing.artist.js" />
     <Content Include="Scripts\administrator.gallery.js" />
     <Content Include="Scripts\bootstrap-image-gallery.js" />
@@ -186,7 +183,10 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\administrator.adding.work.js" />
     <Content Include="Scripts\administrator.editing.work.js" />
+    <Content Include="Scripts\Gulpfile.js" />
     <Content Include="Scripts\jquery.blueimp-gallery.min.js" />
+    <Content Include="Scripts\jquery.time-to.js" />
+    <Content Include="Scripts\jquery.time-to.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="SitePicture\facebook.jpg" />
@@ -216,6 +216,12 @@
     <Content Include="Views\Administrator\Gallery\EditGallery.cshtml" />
     <Content Include="Views\Administrator\Gallery\Galleries.cshtml" />
     <Content Include="Views\Home\Galleries.cshtml" />
+    <Content Include="Views\Administrator\Event\AddEvent.cshtml" />
+    <Content Include="Views\Administrator\Event\DeleteEvent.cshtml" />
+    <Content Include="Views\Administrator\Event\EditEvent.cshtml" />
+    <Content Include="Views\Administrator\Event\Events.cshtml" />
+    <Content Include="Views\Home\Events.cshtml" />
+    <Content Include="Views\Home\OneEvent.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -264,7 +270,9 @@
     <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EventPhotos\" />
     <Folder Include="GalleryPhotos\" />
+    <Folder Include="MyPhotos\" />
     <Folder Include="Paintings\" />
   </ItemGroup>
   <ItemGroup>

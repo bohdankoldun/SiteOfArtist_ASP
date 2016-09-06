@@ -1,0 +1,61 @@
+﻿@model eliezerhome2.Models.Event
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="link-administrator">
+    @Html.ActionLink("Back to list", "Events", "Administrator")
+</div>
+
+<div id="valid_message">
+    @ViewBag.Message
+</div>
+
+@using (Html.BeginForm("AddEvent", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "adding-form-event" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <h3>Додати на сайт нову подію</h3>
+    <hr />
+
+    <div class="editor-label">Ім'я  події:</div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { id = "Name" } })
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="editor-label">Дата  події:</div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Date, new { htmlAttributes = new { type = "datetime-local", id = "Date" } })
+        @Html.ValidationMessageFor(model => model.Date)
+    </div>
+
+    <div class="editor-label">Опис події:</div>
+    <div class="editor-field">
+        @Html.TextAreaFor(model => model.Comment, new
+       {
+           width = "100%",
+           id = "DescribeText",
+           onkeyup = "resizeTextarea('DescribeText')"
+       })
+        @Html.ValidationMessageFor(model => model.Comment)
+    </div>
+
+        <div class="editor-label">Фото події:</div>
+        <div class="editor-field" id="input_files">
+            <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+            <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true"></span>
+            <div id="images-line"></div>
+        </div>
+
+        <div class="button-send">
+            <input type="reset" value="Очистить" />
+            <input type="submit" value="Я все заповнила!" />
+        </div>
+
+}
+
+@Scripts.Render("~/Scripts/administrator.adding.work.js")
+
+

@@ -1,0 +1,79 @@
+﻿@model eliezerhome2.Models.Event
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="link-administrator">
+    @Html.ActionLink("Back to list", "Events")
+</div>
+
+@using (Html.BeginForm("EditEvent", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data", id = "editing-form-event" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="form-horizontal">
+
+        @if (ViewBag.Message != null)
+        {
+            <p id="change-text">@(ViewBag.Message)</p>
+        }
+        <h3>Редагувати подію</h3>
+        <hr />
+
+        @Html.HiddenFor(model => model.EventId)
+
+        <div class="editor-label">Ім'я події:</div>
+        <div class="editor-field">
+            @Html.ValidationMessageFor(model => model.Name)
+            @Html.EditorFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">Дата  події:</div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { type = "datetime-local", id = "Date" } })
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">Опис події:</div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Comment, new
+       {
+           width = "100%",
+           id = "DescribeText",
+           onkeyup = "resizeTextarea('DescribeText')"
+       })
+            @Html.ValidationMessageFor(model => model.Comment)
+        </div>
+
+
+
+        <div class="editor-label">Виділіть червоним фото, які хочете видалить:</div>
+        <div class="editor-field">
+            <div id="images-line">
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Photos.Count; i++)
+                    {
+                        <img src="@("/EventPhotos/" + Model.Photos[i].URL)" />
+                    }
+                }
+            </div>
+            <br />
+            <span class="field-validation-error" data-valmsg-for="Photos" data-valmsg-replace="true">@ViewBag.MessageDelPhotos</span>
+        </div>
+        <div class="editor-label">Додати нові фото:</div>
+        <div class="editor-field" id="input_files">
+            <input type="file" class="files" name="uploadImages" accept="image/*,image/jpeg" multiple />
+        </div>
+        <hr />
+
+        <div class="button-send">
+            <input type="submit" value="Зберегти зміни!" />
+        </div>
+
+    </div>
+}
+
+@Scripts.Render("~/Scripts/administrator.gallery.js")

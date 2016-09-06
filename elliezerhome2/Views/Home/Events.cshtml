@@ -1,0 +1,115 @@
+﻿@model IList<eliezerhome2.Models.Event>
+@{
+    ViewBag.Title = "Events";
+}
+
+@Scripts.Render("~/bundles/timer")
+
+<h2>Events</h2>
+<hr />
+
+@if (Model != null)
+{
+    int count = Model.Count;
+
+    for (int i = 0; i < count / 3; i++)
+    {
+        <div class="row">
+            @for (int j = 0; j < 3; j++)
+            {
+                string text = Model[i * 3 + j].Comment;
+                <div class="col-md-4">
+                    <a href="/Home/OneEvent?id=@Model[i*3+j].EventId">
+                        <img src="@("/EventPhotos/" + @Model[i * 3 + j].Photos[0].URL)" width="100%" class="event-picture" alt="@Model[i * 3 + j].Name" />
+                    </a>
+                    <h2>@Model[i * 3 + j].Name</h2>
+                    <strong>
+                        <abbr title="Date">@Model[i * 3 + j].Date.ToString("f", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</abbr>
+                    </strong>
+                    @if (text.Count() > 100)
+                    {
+                        <pre>@(text.Substring(0,100) + "...")</pre>
+                    }
+                    else
+                    {
+                        <pre>@text</pre>
+                    }
+                    
+                    @{  
+                        DateTime _jan1st1970 = new DateTime(1970, 1, 1);
+                        long x = System.Convert.ToInt64((Model[i * 3 + j].Date - _jan1st1970).TotalMilliseconds);
+                        x -= 10800000;
+                     }
+                    
+                    <div id="@Model[i * 3 + j].Name"></div>
+                    <script>
+                        var date = new Date(@x);
+                        // gives you back 2012-04-11T15:46:29+00:00 in a slightly different format, but the timezone info matches UTC/GMT+0
+                        date.toUTCString();
+                        // gives you back your local time
+                        date.toLocaleString();
+                        $('#@Model[i * 3 + j].Name').timeTo({
+                            timeTo: new Date(date),
+                            displayDays: 2,
+                            theme: "black",
+                            displayCaptions: true,
+                            fontSize: 30,
+                            captionSize: 14
+                        });
+                    </script>
+                </div>
+              }
+        </div>
+<hr />
+      }
+
+
+    <div class="row">
+
+        @for (int i = (count / 3) * 3; i < count; i++)
+        {
+            string text = @Model[i].Comment;
+            <div class="col-md-4">
+                <a href="/Home/OneEvent?id=@Model[i].EventId">          
+                        <img src="@("/EventPhotos/" + @Model[i].Photos[0].URL)" width="100%" class="event-picture" alt="@Model[i].Name" />
+                </a>
+                <h2>@Model[i].Name</h2>
+                <strong>
+                    <abbr title="Date">@Model[i].Date.ToString("f", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</abbr>
+                </strong>
+
+                @if (text.Count() > 100)
+                {
+                    <pre>@(text.Substring(0,100) + "...")</pre> 
+                }
+                else
+                {
+                    <pre>@text</pre>
+                }
+                @{
+                    DateTime _jan1st1970 = new DateTime(1970, 1, 1);
+                    long x = System.Convert.ToInt64((Model[i].Date - _jan1st1970).TotalMilliseconds);
+                    x -= 10800000;
+                 }
+                <div id="@Model[i].Name"></div>
+                    <script>
+                        var date = new Date(@x);
+                        // gives you back 2012-04-11T15:46:29+00:00 in a slightly different format, but the timezone info matches UTC/GMT+0
+                        date.toUTCString();
+                        // gives you back your local time
+                        date.toLocaleString();
+                        $('#@Model[i].Name').timeTo({
+                            timeTo: new Date(date),
+                            displayDays: 2,
+                            theme: "black",
+                            displayCaptions: true,
+                            fontSize: 30,
+                            captionSize: 14
+                        });
+                    </script>
+            </div>
+        }
+    </div>
+}
+
+
