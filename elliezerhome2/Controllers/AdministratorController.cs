@@ -774,6 +774,8 @@ namespace eliezerhome2.Controllers
             if (disposing)
             {
                 dbWorks.Dispose();
+                dbEvents.Dispose();
+                dbGalleries.Dispose();
             }
             base.Dispose(disposing);
         }

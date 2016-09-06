@@ -203,6 +203,16 @@ namespace elliezerhome2.Controllers
             return View(_event);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                dbWorks.Dispose();
+                dbEvents.Dispose();
+                dbGalleries.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
     }
 }
